@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+# @K.Dziuba
+# Tizen IDE docker start script
+# NOTE: you need to run "build.sh" before running this script
+
+# CMD: Tizen Studio
+CMD="/opt/scripts/runTizenIDE.sh"
+
+# CMD: xterm is useful for debugging
+# CMD='xterm'
+
+# ------------------------------- #
+
+init() {
+    echo " [$0] Starting up ..."
+
+    # traps
+    trap terminate SIGINT SIGTERM ERR
+
+    # allow root (and the docker) connection to X-Server
+    xhost +local:root
+    TERMINATED=0
+}
+
+terminate() {
+    if [[ $TERMINATED == 0 ]]; then
+        echo " [$0] Terminating ..."
+
+        # disallow root connection to X-Server
+        xhost -local:root
+        TERMINATED=1
+    fi
+}
+
+main() {
+    init
+
+    # run the container 
+    # (--privileged is required for emulator to work)
+    sudo docker-compose run --rm tizen $CMD
+
+    terminate
+}
+
+set -eu
+main
