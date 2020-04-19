@@ -1,10 +1,10 @@
-Tizen4Docker
+conductconductconductTizen4Docker
 ===========
 This is a docker image allowing you to run Tizen-IDE on ANY Linux distribution. \
 The image is meant to provide fully featured environment for the IDE. 
 
 NOTE: 
-- the image provides support for Tizen emulator
+- the image provides support for Tizen emulator (**make sure check "Emulator Hardware Support"**)
 - the image has built-in java JDK
 - the image has built-in google-chrome browser (required by the IDE)
 
@@ -23,7 +23,7 @@ which docker-compose
 
 NOTE: Advanced configuration can be found at `docker-compose.yml`.
 
-# 3. How to build?  
+# How to build?  
 Simply start a run script: 
 ```bash
 ./runTizen.sh
@@ -40,3 +40,11 @@ Just start the run script:
 ```bash
 ./runTizen.sh
 ```
+
+# Emulator Hardware Support
+Once the IDE is installed and started up, please be sure to enable Hardware Support for the emulator: 
+- open the `Emulator Manager`
+- select desired emulator and click `Edit`
+- go to the `HW Support` and enable settings: 
+  - `CPU VT`
+  - `GPU`
