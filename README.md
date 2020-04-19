@@ -1,4 +1,4 @@
-conductconductconductTizen4Docker
+Tizen4Docker
 ===========
 This is a docker image allowing you to run Tizen-IDE on ANY Linux distribution. \
 The image is meant to provide fully featured environment for the IDE. 
