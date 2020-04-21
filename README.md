@@ -47,4 +47,4 @@ Once the IDE is installed and started up, please be sure to enable Hardware Supp
 2. select desired emulator and click `Edit`
 3. go to the `HW Support` and enable settings: 
     * `CPU VT`
-    *     `GPU`
+    * `GPU`
