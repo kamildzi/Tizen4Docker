@@ -43,8 +43,8 @@ Just start the run script:
 
 # Emulator Hardware Support
 Once the IDE is installed and started up, please be sure to enable Hardware Support for the emulator: 
-- open the `Emulator Manager`
-- select desired emulator and click `Edit`
-- go to the `HW Support` and enable settings: 
-  - `CPU VT`
-  - `GPU`
+1. open the `Emulator Manager`
+2. select desired emulator and click `Edit`
+3. go to the `HW Support` and enable settings: 
+    * `CPU VT`
+    *     `GPU`
