@@ -29,7 +29,8 @@ RUN groupadd -g ${TIZEN_GID} -o ${TIZEN_USER} \
 
 # install dependencies
 COPY ./files /
-RUN chmod a+x /opt/scripts/*.sh
+RUN chmod a+x /opt/scripts/*.sh \
+    && chmod a+x /usr/bin/gnome-terminal
 RUN apt-get update && apt-get upgrade -y \
     && apt-get install -y \
         bash wget \

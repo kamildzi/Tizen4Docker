@@ -1,0 +1,72 @@
+#!/usr/bin/env perl
+# @K.Dziuba
+# Gnome Terminal fake binary
+# (Seems like Tizen Studio always tries to start a gnome-terminal)
+
+use strict;
+use Getopt::Long;
+
+# =================
+# Terminal config
+# =================
+
+my $terminal='xterm';
+
+# =====================
+# Parse the arguments
+# =====================
+
+my $command;
+my $title = "SDB shell";
+
+# DEBUG
+my $DEBUGMSG = "nodebug";
+my $DEBUG;
+# EO: DEBUG
+
+Getopt::Long::Configure('pass_through');
+GetOptions (
+    "title=s" => \$title,
+    "x=s"     => \$command,
+    "DEBUG"   => \$DEBUG
+);
+
+if (!$command) {
+    die "Command is required!";
+}
+
+# =====================
+# Terminal execution
+# =====================
+
+my @terminalArgs = ("/usr/bin/env", $terminal);
+
+# xterm support
+if ($terminal eq 'xterm') {
+    # title
+    push @terminalArgs, "-title";
+    push @terminalArgs, $title;
+    # command
+    push @terminalArgs, "-e";
+    push @terminalArgs, $command;
+    # command args: pass-through all the arguments
+    push @terminalArgs, @ARGV;
+}
+
+# DEBUG
+if ($DEBUG) {
+    use Data::Dumper;
+    $DEBUGMSG = "\n--- DEBUG ---\n"
+        . " TITLE: $title\n"
+        . " CMD:   $command\n"
+        . "-------------\n"
+        . " EXEC-ARRAY: \n"
+        . Dumper(@terminalArgs)
+        . "-------------\n";
+    print $DEBUGMSG;
+}
+# EO: DEBUG
+
+# exec
+system(@terminalArgs) == 0
+    or die "[$terminal] execution failed: $?";
