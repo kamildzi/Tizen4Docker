@@ -3,13 +3,31 @@
 # Tizen IDE docker start script
 # NOTE: you need to run "build.sh" before running this script
 
-# CMD: Tizen Studio
-CMD="/opt/scripts/runTizenIDE.sh"
+# say 'yes' if you want to use sudo for docker. 
+useSudo='yes'
 
-# CMD: xterm is useful for debugging
-# CMD='xterm'
+# Set CMD
+case $1 in
+    "xterm" | "debug" | "d" )
+        # xterm is useful for debugging
+        CMD='xterm'
+        ;;
+    * )
+        # Default: Tizen Studio
+        CMD="/opt/scripts/runTizenIDE.sh"
+        ;;
+esac
 
 # ------------------------------- #
+
+setRunPrefix() {
+    # Sudo support
+    if [[ $useSudo == 'yes' ]]; then
+        runPrefix='sudo'
+    else
+        runPrefix=''
+    fi
+}
 
 init() {
     echo " [$0] Starting up ..."
@@ -37,10 +55,11 @@ main() {
 
     # run the container 
     # (--privileged is required for emulator to work)
-    sudo docker-compose run --rm tizen $CMD
+    $runPrefix docker-compose run --rm tizen $CMD
 
     terminate
 }
 
+setRunPrefix
 set -eu
 main
