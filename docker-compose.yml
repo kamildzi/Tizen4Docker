@@ -10,6 +10,8 @@ services:
         - TIZEN_USER=${TIZEN_USER}
         - TIZEN_UID=${TIZEN_UID}
         - TIZEN_GID=${TIZEN_GID}
+        ### audio config ###
+        - AUDIO_GID=${AUDIO_GID}
         ### version config ###
         - TIZEN_VERSION=${TIZEN_VERSION}
         # - TIZEN_BINARY=web-ide_Tizen_Studio_${TIZEN_VERSION}_ubuntu-64.bin

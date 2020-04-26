@@ -15,8 +15,11 @@ ARG TIZEN_USER
 ARG TIZEN_UID
 ARG TIZEN_GID
 
-# args: General
+# args: System/General
 ARG ROOT_PASS
+
+# args: audio
+ARG AUDIO_GID
 
 # set root password
 RUN echo "root:${ROOT_PASS}" | chpasswd
@@ -52,6 +55,10 @@ RUN wget ${CHROME_REPO}"/"${CHROME_BINARY} \
 
 # cleanup for lower image size
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# audio support
+RUN groupmod --gid ${AUDIO_GID} audio \
+    && usermod -a -G audio ${TIZEN_USER}
 
 # switch user
 USER ${TIZEN_USER}
