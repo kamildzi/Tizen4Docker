@@ -44,9 +44,8 @@ RUN apt-get install -fy /root/ext-pkg/*.deb
 RUN apt-get install -y libsdl1.2debian libv4l-0 libasound2 \
     libxcb-render-util0 libxcb-image0 libxcb-icccm4 libxcb-xfixes0 libxcb-randr0
 
-
 # (optional) install xterm to ease development and testing/debugging 
-RUN apt-get install -y xterm wget
+RUN apt-get install -y xterm
 
 # install chrome browser
 RUN wget ${CHROME_REPO}"/"${CHROME_BINARY} \
