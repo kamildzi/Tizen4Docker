@@ -18,7 +18,9 @@ case $1 in
         ;;
 esac
 
-# ------------------------------- #
+# ==============
+# Functions
+# ==============
 
 setRunPrefix() {
     # Sudo support
@@ -54,11 +56,14 @@ main() {
     init
 
     # run the container 
-    # (--privileged is required for emulator to work)
     $runPrefix docker-compose run --rm tizen $CMD
 
     terminate
 }
+
+# ==============
+# EO: Functions
+# ==============
 
 setRunPrefix
 set -eu
