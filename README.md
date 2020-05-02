@@ -40,6 +40,7 @@ Just start the run script:
 ```bash
 ./runTizen.sh
 ```
+NOTE: Tizen-Studio will be automatically fetched and installed on the first run
 
 # Emulator Hardware Support
 Once the IDE is installed and started up, please be sure to enable Hardware Support for the emulator: 
