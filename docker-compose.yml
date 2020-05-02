@@ -14,7 +14,6 @@ services:
         - AUDIO_GID=${AUDIO_GID}
         ### version config ###
         - TIZEN_VERSION=${TIZEN_VERSION}
-        # - TIZEN_BINARY=web-ide_Tizen_Studio_${TIZEN_VERSION}_ubuntu-64.bin
         - TIZEN_BINARY=web-cli_Tizen_Studio_${TIZEN_VERSION}_ubuntu-64.bin
         - TIZEN_REPO=http://download.tizen.org/sdk/Installer/tizen-studio_${TIZEN_VERSION}
         ### tizen target ###
@@ -29,6 +28,8 @@ services:
       - DISPLAY=${DISPLAY}
     volumes:
       - "${XSOCK}:${XSOCK}"
-      - "${LOCAL_WORKSPACE}:${DOCKER_WORKSPACE}"
+      - "${LOCAL_WORKSPACE}:/home/${TIZEN_USER}/workspace"
+      - "${LOCAL_TIZEN_STUDIO_DIRECTORY}:/home/${TIZEN_USER}/tizen-studio"
+      - "${LOCAL_TIZEN_STUDIO_DATA_DIRECTORY}:/home/${TIZEN_USER}/tizen-studio-data"
     devices:
       - /dev/snd

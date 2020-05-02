@@ -44,10 +44,10 @@ RUN apt-get install -fy /root/ext-pkg/*.deb
 RUN apt-get install -y libsdl1.2debian libv4l-0 libasound2 \
     libxcb-render-util0 libxcb-image0 libxcb-icccm4 libxcb-xfixes0 libxcb-randr0
 
-# (optional) install xterm to ease development and testing/debugging 
+# (optional) install xterm (required for SDB-Console to work; might be used for advanced debugging - check `runTizen.sh`)
 RUN apt-get install -y xterm
 
-# install chrome browser
+# (optional) install chrome browser (required for Tizen Studio web-simulator)
 RUN wget ${CHROME_REPO}"/"${CHROME_BINARY} \
     && apt-get install -fy "./"${CHROME_BINARY} \
     && rm "./"${CHROME_BINARY}
@@ -59,19 +59,19 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 RUN groupmod --gid ${AUDIO_GID} audio \
     && usermod -a -G audio ${TIZEN_USER}
 
+# dump the config
+RUN DUMPFILE="/opt/scripts/imgConfig.sh" \
+    && echo "TIZEN_VERSION=${TIZEN_VERSION}" >> ${DUMPFILE} \
+    && echo "TIZEN_BINARY=${TIZEN_BINARY}" >> ${DUMPFILE} \
+    && echo "TIZEN_REPO=${TIZEN_REPO}" >> ${DUMPFILE} \
+    && echo "TIZEN_TARGET=${TIZEN_TARGET}" >> ${DUMPFILE} \
+    && echo "CHROME_REPO=${CHROME_REPO}" >> ${DUMPFILE} \
+    && echo "CHROME_BINARY=${CHROME_BINARY}" >> ${DUMPFILE} \
+    && echo "TIZEN_USER=${TIZEN_USER}" >> ${DUMPFILE} \
+    && echo "TIZEN_UID=${TIZEN_UID}" >> ${DUMPFILE} \
+    && echo "TIZEN_GID=${TIZEN_GID}" >> ${DUMPFILE} \
+    && echo "AUDIO_GID=${AUDIO_GID}" >> ${DUMPFILE} \
+    && echo "" >> ${DUMPFILE} 
+
 # switch user
 USER ${TIZEN_USER}
-
-# download the IDE
-RUN cd ~ \
-    && wget ${TIZEN_REPO}"/"${TIZEN_BINARY} \
-    && chmod +x ./${TIZEN_BINARY}
-
-# install the IDE
-RUN cd ~ \
-    && ./${TIZEN_BINARY} --accept-license ~/tizen-studio \
-    && ./tizen-studio/package-manager/package-manager-cli.bin install NativeIDE Emulator PlatformIDE \
-    && ./tizen-studio/package-manager/package-manager-cli.bin install ${TIZEN_TARGET}
-
-# final cleaning
-RUN rm ~/${TIZEN_BINARY}

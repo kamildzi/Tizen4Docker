@@ -1,5 +1,5 @@
 ### @K.Dziuba
-# this files lists sources of the external *.deb packages
+# this file lists sources of the external *.deb packages
 
 libpng12-0_1.2.50-2+deb8u3_amd64.deb
 https://packages.debian.org/jessie/amd64/libpng12-0/download
