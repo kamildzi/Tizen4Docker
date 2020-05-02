@@ -2,13 +2,16 @@
 # @K.Dziuba
 # Tizen IDE installer
 
+# ==============
+# Base config
+# ==============
+
 # Tizen install directory
 # NOTE: installation will be done only if $TIZEN_DIR is empty
 TIZEN_DIR=~/tizen-studio/
 
-# make sure we're at correct location
+# Set the script root path
 SCRIPT_ROOT=$( readlink -f $( dirname "${BASH_SOURCE[0]}" ) )
-cd $SCRIPT_ROOT;
 
 # ==============
 # Functions
@@ -74,11 +77,12 @@ main(){
     fi
 }
 
-# ==============
-# EO: Functions
-# ==============
+# ==================
+# Invoke the script
+# ==================
 
 set -u
+cd $SCRIPT_ROOT
 source ./imgConfig.sh || fail "Failed to source image config!"
 main
 exit 0
