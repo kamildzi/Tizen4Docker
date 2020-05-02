@@ -43,6 +43,8 @@ Just start the run script:
 ```bash
 ./runTizen.sh
 ```
+(you might want to create a custom launcher to run this script)\
+\
 NOTE: Tizen-Studio will be automatically fetched and installed on the first run
 
 # Emulator Hardware Support
