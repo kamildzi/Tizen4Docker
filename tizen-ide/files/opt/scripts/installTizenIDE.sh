@@ -3,6 +3,7 @@
 # Tizen IDE installer
 
 # Tizen install directory
+# NOTE: installation will be done only if $TIZEN_DIR is empty
 TIZEN_DIR=~/tizen-studio/
 
 # make sure we're at correct location
@@ -35,6 +36,12 @@ fetchTizen(){
     # cleaning
     rm ~/${TIZEN_BINARY}
     TIZEN_INSTALLED=1
+
+    # fix tizen-studio-data directory
+    SDK_PREF_FILE=~/tizen-studio/sdk.info
+    SEARCH="tizen-studio-data.1"
+    REPLACE="tizen-studio-data"
+    sed -i "s|$SEARCH|$REPLACE|g" $SDK_PREF_FILE
 }
 
 # sets $TIZEN_INSTALLED variable to 1 or 0

@@ -67,6 +67,10 @@ RUN DUMPFILE="/opt/scripts/imgConfig.sh" \
     && echo "TIZEN_TARGET=${TIZEN_TARGET}" >> ${DUMPFILE} \
     && echo "CHROME_REPO=${CHROME_REPO}" >> ${DUMPFILE} \
     && echo "CHROME_BINARY=${CHROME_BINARY}" >> ${DUMPFILE} \
+    && echo "TIZEN_USER=${TIZEN_USER}" >> ${DUMPFILE} \
+    && echo "TIZEN_UID=${TIZEN_UID}" >> ${DUMPFILE} \
+    && echo "TIZEN_GID=${TIZEN_GID}" >> ${DUMPFILE} \
+    && echo "AUDIO_GID=${AUDIO_GID}" >> ${DUMPFILE} \
     && echo "" >> ${DUMPFILE} 
 
 # switch user
