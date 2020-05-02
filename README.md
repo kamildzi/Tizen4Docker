@@ -18,10 +18,13 @@ which docker-compose
 ```
 
 # Configuration
+## Base configuration (required)
 1. Please review the settings in `.env.example` file.
 2. Edit and save new settings as `.env` file. 
 
-NOTE: Advanced configuration can be found at `docker-compose.yml`.
+## Advanced configuration (optional, most users should be fine with defaults)
+1. You might want to change authentication method for docker-compose command. This can be done at `runTizen.sh` file (please check `# Docker-Auth config` header). 
+2. Advanced configuration can be found at `docker-compose.yml`.
 
 # How to build?  
 Simply start a run script: 
