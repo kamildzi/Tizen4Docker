@@ -3,10 +3,39 @@
 # Tizen IDE docker start script
 # NOTE: you need to run "build.sh" before running this script
 
-# say 'yes' if you want to use sudo for docker. 
-useSudo='yes'
+# ===================
+# Docker-Auth config
+# ===================
 
+# enable for sudo authentication
+authWithSudo='yes'
+
+# enable for polkit/pkexec authentication (recommended)
+authWithPkexec='yes'
+
+# enable for zensu authentication
+# authWithZensu='yes'
+
+# enable for gksu authentication
+# authWithGksu='yes'
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# NOTE: to completely disable superuser auth (sudo, pkexec, etc.), 
+#       please say 'no' in all above settings (or just comment them out)
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# ==============
+# Paths config
+# ==============
+
+SCRIPT_ROOT=$( readlink -f $( dirname "${BASH_SOURCE[0]}" ) )
+COMPOSE_FILE="$SCRIPT_ROOT/docker-compose.yml"
+ENV_FILE="$SCRIPT_ROOT/.env"
+
+# ==============
 # Set CMD
+# ==============
+
 case $1 in
     "xterm" | "debug" | "d" )
         # xterm is useful for debugging
@@ -22,17 +51,49 @@ esac
 # Functions
 # ==============
 
-setRunPrefix() {
-    # Sudo support
-    if [[ $useSudo == 'yes' ]]; then
-        runPrefix='sudo'
+# echo wrapper
+# $1 - message to pring
+printText() {
+    echo -e " [$0] $1"
+}
+
+# sets the $authPrefix, if given binary exists
+# $1 - binary file
+setAuthPrefix() {
+    if which "$1" | read; then
+        authPrefix="$1"
     else
-        runPrefix=''
+        printText "$1 not found! Skipping..."
+    fi
+}
+
+# uses setAuthPrefix() to auto-set the $authPrefix defined in the config
+autoSetAuthPrefix() {
+    authPrefix=''
+
+    # Sudo support
+    if [[ $authWithSudo == 'yes' ]]; then
+        setAuthPrefix sudo
+    fi
+
+    # Zensu support
+    if [[ $authWithZensu == 'yes' ]]; then
+        setAuthPrefix zensu
+    fi
+
+    # Gksu support
+    if [[ $authWithGksu == 'yes' ]]; then
+        setAuthPrefix gksu
+    fi
+
+    # Polkit/pkexec support
+    if [[ $authWithPkexec == 'yes' ]]; then
+        setAuthPrefix pkexec
     fi
 }
 
 init() {
-    echo " [$0] Starting up ..."
+    printText "Starting up ..."
 
     # traps
     trap terminate SIGINT SIGTERM ERR
@@ -44,7 +105,7 @@ init() {
 
 terminate() {
     if [[ $TERMINATED == 0 ]]; then
-        echo " [$0] Terminating ..."
+        printText "Terminating ..."
 
         # disallow root connection to X-Server
         xhost -local:root
@@ -56,15 +117,18 @@ main() {
     init
 
     # run the container 
-    $runPrefix docker-compose run --rm tizen $CMD
+    $authPrefix docker-compose \
+        --file "$COMPOSE_FILE" \
+        --env-file "$ENV_FILE" \
+        run --rm tizen "$CMD"
 
     terminate
 }
 
-# ==============
-# EO: Functions
-# ==============
+# ==================
+# Invoke the script
+# ==================
 
-setRunPrefix
+autoSetAuthPrefix
 set -eu
 main
