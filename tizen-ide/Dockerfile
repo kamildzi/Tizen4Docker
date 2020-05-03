@@ -30,13 +30,13 @@ RUN groupadd -g ${TIZEN_GID} -o ${TIZEN_USER} \
     && mkdir -p /run/user/$TIZEN_UID \
     && chown ${TIZEN_UID}:${TIZEN_GID} /run/user/${TIZEN_UID}
 
-# install dependencies
+# install base dependencies
 COPY ./files /
 RUN chmod a+x /opt/scripts/*.sh \
     && chmod a+x /usr/bin/gnome-terminal
 RUN apt-get update && apt-get upgrade -y \
     && apt-get install -y \
-        bash wget \
+        bash wget zip unzip \
         openjdk-11-jdk
 
 # emulator dependencies
@@ -62,16 +62,16 @@ RUN groupmod --gid ${AUDIO_GID} audio \
 # dump the config
 RUN DUMPFILE="/opt/scripts/imgConfig.sh" \
     && echo "TIZEN_VERSION=${TIZEN_VERSION}" >> ${DUMPFILE} \
-    && echo "TIZEN_BINARY=${TIZEN_BINARY}" >> ${DUMPFILE} \
-    && echo "TIZEN_REPO=${TIZEN_REPO}" >> ${DUMPFILE} \
-    && echo "TIZEN_TARGET=${TIZEN_TARGET}" >> ${DUMPFILE} \
-    && echo "CHROME_REPO=${CHROME_REPO}" >> ${DUMPFILE} \
+    && echo "TIZEN_BINARY=${TIZEN_BINARY}"   >> ${DUMPFILE} \
+    && echo "TIZEN_REPO=${TIZEN_REPO}"       >> ${DUMPFILE} \
+    && echo "TIZEN_TARGET=${TIZEN_TARGET}"   >> ${DUMPFILE} \
+    && echo "CHROME_REPO=${CHROME_REPO}"     >> ${DUMPFILE} \
     && echo "CHROME_BINARY=${CHROME_BINARY}" >> ${DUMPFILE} \
-    && echo "TIZEN_USER=${TIZEN_USER}" >> ${DUMPFILE} \
-    && echo "TIZEN_UID=${TIZEN_UID}" >> ${DUMPFILE} \
-    && echo "TIZEN_GID=${TIZEN_GID}" >> ${DUMPFILE} \
-    && echo "AUDIO_GID=${AUDIO_GID}" >> ${DUMPFILE} \
-    && echo "" >> ${DUMPFILE} 
+    && echo "TIZEN_USER=${TIZEN_USER}"       >> ${DUMPFILE} \
+    && echo "TIZEN_UID=${TIZEN_UID}"         >> ${DUMPFILE} \
+    && echo "TIZEN_GID=${TIZEN_GID}"         >> ${DUMPFILE} \
+    && echo "AUDIO_GID=${AUDIO_GID}"         >> ${DUMPFILE} \
+    && echo ""                               >> ${DUMPFILE}
 
 # switch user
 USER ${TIZEN_USER}

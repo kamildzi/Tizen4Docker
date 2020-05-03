@@ -6,3 +6,6 @@ https://packages.debian.org/jessie/amd64/libpng12-0/download
 
 libssl1.0.0_1.0.1t-1+deb8u12_amd64.deb
 https://packages.debian.org/jessie/amd64/libssl1.0.0/download
+
+libjpeg-turbo8_1.4.2-0ubuntu3_amd64.deb
+http://archive.ubuntu.com/ubuntu/pool/main/libj/libjpeg-turbo/libjpeg-turbo8_1.4.2-0ubuntu3_amd64.deb
