@@ -35,7 +35,7 @@ fetchTizen(){
     ./${TIZEN_BINARY} --accept-license "$TIZEN_DIR"                                               || fail "Install step 1 failed"
     ./tizen-studio/package-manager/package-manager-cli.bin install NativeIDE Emulator PlatformIDE || fail "Install step 2 failed"
 
-    if [[ -v TIZEN_TARGET ]]; then
+    if [[ -v TIZEN_TARGET ]] && [[ ${TIZEN_TARGET} != '' ]]; then
         echo "Installing tizen-target: ${TIZEN_TARGET}"
         ./tizen-studio/package-manager/package-manager-cli.bin install ${TIZEN_TARGET} || fail "Install step 3 failed"
     else
