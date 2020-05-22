@@ -52,12 +52,12 @@ RUN wget ${CHROME_REPO}"/"${CHROME_BINARY} \
     && apt-get install -fy "./"${CHROME_BINARY} \
     && rm "./"${CHROME_BINARY}
 
-# cleanup for lower image size
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
-
 # audio support
 RUN groupmod --gid ${AUDIO_GID} audio \
     && usermod -a -G audio ${TIZEN_USER}
+
+# gnome keyring support
+RUN apt-get install -y gnome-keyring
 
 # dump the config
 RUN DUMPFILE="/opt/scripts/imgConfig.sh" \
@@ -72,6 +72,9 @@ RUN DUMPFILE="/opt/scripts/imgConfig.sh" \
     && echo "TIZEN_GID=${TIZEN_GID}"         >> ${DUMPFILE} \
     && echo "AUDIO_GID=${AUDIO_GID}"         >> ${DUMPFILE} \
     && echo ""                               >> ${DUMPFILE}
+
+# cleanup for lower image size
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # switch user
 USER ${TIZEN_USER}
