@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # @K.Dziuba
 # Tizen IDE install and start script wrapper (installation should be invoked only when it's needed)
+set -eu
 
 # gnome-keyring support: link keyring data
 VOLUME_DATA_DIR=~/tizen-studio-data/_EXT_TIZEN4DOCKER_/.local
