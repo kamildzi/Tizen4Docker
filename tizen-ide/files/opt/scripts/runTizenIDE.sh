@@ -13,7 +13,7 @@ ln -s $VOLUME_DATA_DIR ~/.local
 
 # init dbus, run the IDE
 dbus-run-session -- bash -c '\
-    echo 12345 | gnome-keyring-daemon --unlock \
+    echo 12345 | gnome-keyring-daemon --unlock && \
     \
     /opt/scripts/installTizenIDE.sh && \
     ~/tizen-studio/ide/TizenStudio.sh'
