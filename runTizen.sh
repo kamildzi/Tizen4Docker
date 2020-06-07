@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 # @K.Dziuba
-# Tizen IDE docker start script
-# NOTE: you need to run "build.sh" before running this script
+# Tizen4Docker install/startup script
 
 # ===================
 # Docker-Auth config
