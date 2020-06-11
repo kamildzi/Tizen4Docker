@@ -21,6 +21,9 @@ ARG ROOT_PASS
 # args: audio
 ARG AUDIO_GID
 
+# args: kvm
+ARG KVM_GID
+
 # set root password
 RUN echo "root:${ROOT_PASS}" | chpasswd
 
@@ -53,8 +56,12 @@ RUN wget ${CHROME_REPO}"/"${CHROME_BINARY} \
     && rm "./"${CHROME_BINARY}
 
 # audio support
-RUN groupmod --gid ${AUDIO_GID} audio \
+RUN groupmod -o --gid ${AUDIO_GID} audio \
     && usermod -a -G audio ${TIZEN_USER}
+
+# KVM support
+RUN groupmod -o --gid ${KVM_GID} kvm \
+    && usermod -a -G kvm ${TIZEN_USER}
 
 # gnome keyring support
 RUN apt-get install -y gnome-keyring
