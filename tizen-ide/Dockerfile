@@ -40,7 +40,7 @@ RUN chmod a+x /opt/scripts/*.sh \
 RUN apt-get update && apt-get upgrade -y \
     && apt-get install -y \
         bash wget zip unzip \
-        openjdk-11-jdk
+        openjdk-11-jdk libcanberra-gtk0
 
 # emulator dependencies
 RUN apt-get install -fy /root/ext-pkg/*.deb
@@ -78,6 +78,7 @@ RUN DUMPFILE="/opt/scripts/imgConfig.sh" \
     && echo "TIZEN_UID=${TIZEN_UID}"         >> ${DUMPFILE} \
     && echo "TIZEN_GID=${TIZEN_GID}"         >> ${DUMPFILE} \
     && echo "AUDIO_GID=${AUDIO_GID}"         >> ${DUMPFILE} \
+    && echo "KVM_GID=${KVM_GID}"             >> ${DUMPFILE} \
     && echo ""                               >> ${DUMPFILE}
 
 # cleanup for lower image size
