@@ -30,6 +30,14 @@ authWithPkexec='yes'
 SCRIPT_ROOT=$( readlink -f $( dirname "${BASH_SOURCE[0]}" ) )
 COMPOSE_FILE="$SCRIPT_ROOT/docker-compose.yml"
 ENV_FILE="$SCRIPT_ROOT/.env"
+BACKUP_DIR="$SCRIPT_ROOT/_backups"
+
+# ==============
+# Dates config
+# ==============
+
+DATE_FORMAT='%Y-%m-%d__%H-%M'
+DATE=(`date +$DATE_FORMAT`)
 
 # ==============
 # Set CMD
@@ -39,10 +47,17 @@ case $1 in
     "xterm" | "debug" | "d" )
         # xterm is useful for debugging
         CMD='xterm'
+        ACTION="false"
+        ;;
+    "backup" | "purge" )
+        # general actions
+        CMD="false"
+        ACTION=$1
         ;;
     * )
         # Default: Tizen Studio
         CMD="/opt/scripts/runTizenIDE.sh"
+        ACTION="false"
         ;;
 esac
 
@@ -97,29 +112,106 @@ init() {
     # traps
     trap terminate SIGINT SIGTERM ERR
 
-    # allow root (and the docker) connection to X-Server
-    xhost +local:root
-    TERMINATED=0
+    if [[ $CMD != "false" ]]; then
+        # allow root (and the docker) connection to X-Server
+        xhost +local:root
+    fi
 }
 
 terminate() {
-    if [[ $TERMINATED == 0 ]]; then
-        printText "Terminating ..."
+    printText "Terminating ..."
 
+    if [[ $CMD != "false" ]]; then
         # disallow root connection to X-Server
         xhost -local:root
-        TERMINATED=1
     fi
+
+    exit
+}
+
+askContinue() {
+    read -p $'\n Continue? [Y/n] ' ans
+    echo ""
+    if [[ $ans != 'Y' ]]; then
+        printText "Aborted by user"
+        terminate
+    fi
+}
+
+# docker volumes purge process
+interactivePurge() {
+    cd "$SCRIPT_ROOT"
+    source "$ENV_FILE"
+
+    printText "Interactive volumes purge started..."
+
+    printText "About to clear LOCAL_TIZEN_STUDIO_DIRECTORY: \n$LOCAL_TIZEN_STUDIO_DIRECTORY"
+    read -p "Clear it? [Y/n] " ans
+    if [[ $ans == 'Y' ]]; then
+        rm -rf "$LOCAL_TIZEN_STUDIO_DIRECTORY"
+        mkdir "$LOCAL_TIZEN_STUDIO_DIRECTORY"
+        echo "... OK"
+    fi
+
+    printText "About to clear LOCAL_TIZEN_STUDIO_DATA_DIRECTORY: \n$LOCAL_TIZEN_STUDIO_DATA_DIRECTORY"
+    read -p "Clear it? [Y/n] " ans
+    if [[ $ans == 'Y' ]]; then
+        rm -rf "$LOCAL_TIZEN_STUDIO_DATA_DIRECTORY"
+        mkdir "$LOCAL_TIZEN_STUDIO_DATA_DIRECTORY"
+        echo "... OK"
+    fi
+
+    printText "About to clear LOCAL_WORKSPACE: \n$LOCAL_WORKSPACE"
+    echo -e "\033[33mNOTE: \033[33;5mTHIS WILL CLEAR YOUR PROJECT WORKSPACE\033[0m"
+    echo -e "\033[33m      (you can say 'no' if all you want is to restart the IDE installation process)\033[0m"
+    read -p "Clear it? [Y/n] " ans
+    if [[ $ans == 'Y' ]]; then
+        rm -rf "$LOCAL_WORKSPACE"
+        mkdir "$LOCAL_WORKSPACE"
+        echo "... OK"
+    fi
+
+    printText "Interactive volumes purge stopped..."
+}
+
+# volume data backup process
+volumesBackup() {
+    CURRENT_BACKUP_DIR="$BACKUP_DIR"/"$DATE"
+
+    cd "$SCRIPT_ROOT"
+    source "$ENV_FILE"
+
+    # user confirmation
+    printText "Notice:\nDocker volumes backups will be saved at: \n$CURRENT_BACKUP_DIR"
+    askContinue
+
+    # actual backup
+    mkdir -p "$CURRENT_BACKUP_DIR"
+    cp -ap "$LOCAL_TIZEN_STUDIO_DIRECTORY" "$CURRENT_BACKUP_DIR"
+    cp -ap "$LOCAL_TIZEN_STUDIO_DATA_DIRECTORY" "$CURRENT_BACKUP_DIR"
+    cp -ap "$LOCAL_WORKSPACE" "$CURRENT_BACKUP_DIR"
+
+    printText "Backup is done. To restore the backup data, please manually copy it into the defined volume paths."
 }
 
 main() {
     init
 
-    # run the container 
-    $authPrefix docker-compose \
-        --file "$COMPOSE_FILE" \
-        --env-file "$ENV_FILE" \
-        run --rm tizen "$CMD"
+    if [[ $CMD != "false" ]]; then
+        # default - run the container
+        $authPrefix docker-compose \
+            --file "$COMPOSE_FILE" \
+            --env-file "$ENV_FILE" \
+            run --rm tizen "$CMD"
+
+    elif [[ $ACTION == "backup" ]]; then
+        # backup docker volumes
+        volumesBackup
+
+    elif [[ $ACTION == "purge" ]]; then
+        # clear docker volumes
+        interactivePurge
+    fi
 
     terminate
 }
