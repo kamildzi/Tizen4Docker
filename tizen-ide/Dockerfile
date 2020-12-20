@@ -66,6 +66,14 @@ RUN groupmod -o --gid ${KVM_GID} kvm \
 # gnome keyring support
 RUN apt-get install -y gnome-keyring
 
+# Web fix
+RUN echo "deb http://cz.archive.ubuntu.com/ubuntu bionic main universe" >> /etc/apt/sources.list.d/web.list
+RUN apt-get install -y gnupg
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 78BD65473CB3BD13
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3B4FE6ACC0B21F32
+RUN apt-get update && apt-get upgrade -y \
+    && apt-get install -y libwebkitgtk-1.0-0
+
 # dump the config
 RUN DUMPFILE="/opt/scripts/imgConfig.sh" \
     && echo "TIZEN_VERSION=${TIZEN_VERSION}" >> ${DUMPFILE} \
