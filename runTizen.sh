@@ -146,32 +146,38 @@ interactivePurge() {
     printText "Interactive volumes purge started..."
 
     printText "About to clear LOCAL_TIZEN_STUDIO_DIRECTORY: \n$LOCAL_TIZEN_STUDIO_DIRECTORY"
-    read -p "Clear it? [Y/n] " ans
+    read -p "Clear it? [Y/N] " ans
     if [[ $ans == 'Y' ]]; then
         rm -rf "$LOCAL_TIZEN_STUDIO_DIRECTORY"
         mkdir "$LOCAL_TIZEN_STUDIO_DIRECTORY"
         echo "... OK"
+    else
+        echo "... clearing skipped."
     fi
 
     printText "About to clear LOCAL_TIZEN_STUDIO_DATA_DIRECTORY: \n$LOCAL_TIZEN_STUDIO_DATA_DIRECTORY"
-    read -p "Clear it? [Y/n] " ans
+    read -p "Clear it? [Y/N] " ans
     if [[ $ans == 'Y' ]]; then
         rm -rf "$LOCAL_TIZEN_STUDIO_DATA_DIRECTORY"
         mkdir "$LOCAL_TIZEN_STUDIO_DATA_DIRECTORY"
         echo "... OK"
+    else
+        echo "... clearing skipped."
     fi
 
     printText "About to clear LOCAL_WORKSPACE: \n$LOCAL_WORKSPACE"
     echo -e "\033[33mNOTE: \033[33;5mTHIS WILL CLEAR YOUR PROJECT WORKSPACE\033[0m"
     echo -e "\033[33m      (you can say 'no' if all you want is to restart the IDE installation process)\033[0m"
-    read -p "Clear it? [Y/n] " ans
+    read -p "Clear it? [Y/N] " ans
     if [[ $ans == 'Y' ]]; then
         rm -rf "$LOCAL_WORKSPACE"
         mkdir "$LOCAL_WORKSPACE"
         echo "... OK"
+    else
+        echo "... clearing skipped."
     fi
 
-    printText "Interactive volumes purge stopped..."
+    printText "Interactive volumes purge finished..."
 }
 
 # volume data backup process
