@@ -9,8 +9,8 @@ NOTE:
 - the image has built-in google-chrome browser (required by the IDE)
 
 # Requirements
-Docker and Docker-Compose are the base requirements. \
-Make sure to have them installed on your system. \
+Docker is the base requirement. \
+Make sure to have it installed on your system. \
 \
 Detailed dependency check can be done with `./checkDeps.sh` script.
 ```bash
@@ -24,7 +24,7 @@ Detailed dependency check can be done with `./checkDeps.sh` script.
 2. Edit and save new settings as `.env` file. 
 
 ## Advanced configuration (optional, most users should be fine with defaults)
-1. You might want to change authentication method for docker-compose command. This can be done at `runTizen.sh` file (please check `# Docker-Auth config` header). 
+1. You might want to change authentication method for the `docker` command. This can be done at `runTizen.sh` file (please check `# Docker-Auth config` header). 
 2. Advanced configuration can be found at `docker-compose.yml`.
 3. Advanced users might be interested in debug mode `./runTizen.sh d` (which allows easy access to docker container)
 
@@ -37,7 +37,7 @@ This will automatically build docker-image if it is needed. \
 \
 Alternatively you might start build command manually:
 ```bash
-sudo docker-compose build
+sudo docker compose build
 ```
 
 # How to run the IDE?

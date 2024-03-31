@@ -205,7 +205,7 @@ main() {
 
     if [[ $CMD != "false" ]]; then
         # default - run the container
-        $authPrefix docker-compose \
+        $authPrefix docker compose \
             --file "$COMPOSE_FILE" \
             --env-file "$ENV_FILE" \
             run --rm tizen "$CMD"
