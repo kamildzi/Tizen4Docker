@@ -2,7 +2,7 @@
 # @K.Dziuba
 # Tizen4Docker dependencies check
 
-REQUIREMENTS="docker docker-compose xhost bash"
+REQUIREMENTS="docker xhost bash"
 
 # Define colors (ANSI)
 C_RED='\033[0;31m'
