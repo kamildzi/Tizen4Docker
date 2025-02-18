@@ -60,7 +60,11 @@ RUN groupmod -o --gid ${AUDIO_GID} audio \
     && usermod -a -G audio ${TIZEN_USER}
 
 # KVM support
-RUN groupmod -o --gid ${KVM_GID} kvm \
+RUN if [[ $(getent group kvm) ]]; then \
+        groupmod -o --gid ${KVM_GID} kvm; \
+    else \
+        groupadd -g ${KVM_GID} kvm; \
+    fi \
     && usermod -a -G kvm ${TIZEN_USER}
 
 # gnome keyring support
