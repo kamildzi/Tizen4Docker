@@ -45,7 +45,7 @@ RUN apt-get update && apt-get upgrade -y \
 # emulator dependencies
 RUN apt-get install -fy /root/ext-pkg/*.deb
 RUN apt-get install -y libsdl1.2debian libv4l-0 libasound2 \
-    libxcb-render-util0 libxcb-image0 libxcb-icccm4 libxcb-xfixes0 libxcb-randr0
+    libxcb-render-util0 libxcb-image0 libxcb-icccm4 libxcb-xfixes0 libxcb-randr0 libgtk-3-0
 
 # (optional) install xterm (required for SDB-Console to work; might be used for advanced debugging - check `runTizen.sh`)
 RUN apt-get install -y xterm
